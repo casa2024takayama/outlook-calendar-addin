@@ -2,7 +2,7 @@
 // 予定は直接書き込まない（保存は Outlook でユーザーが押す）。本文はこの画面の中だけで処理し、外部へは送らない。
 (function () {
   'use strict';
-  const VERSION = '0.1.1';
+  const VERSION = '0.1.2';
   const OUTLOOK_WEB = 'https://outlook.cloud.microsoft/calendar/deeplink/compose';
   const STORE_KEY = 'olCalAddin.v1';
   const P = window.MailDateParser;

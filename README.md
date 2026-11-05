@@ -26,6 +26,7 @@ Outlook アプリの予定画面には「終日」を直接指定できない（
 - 件名に付けるメール名は `RE:`／`FW:` と日付入りの括弧を外したもの
 - 場所（行頭「場所」「会場」「開催場所」）は、締切系の予定には付けない
 - 過去の日付・期間の中の1日・年の誤記らしきものは、注記を付けて表示（過去は下にまとめる）
+- URL の中の日付（`…/2026/11/05/…`）は読まない。「Ver 1/2」「参加率は 3/4」のような分数（年・曜日・時刻なしの「数/数」で、直前が版・率・割合・点数など）は日付にしない（v0.1.2）
 
 ## 登録済みの記録
 
@@ -35,12 +36,27 @@ Outlook アプリの予定画面には「終日」を直接指定できない（
 
 ```bash
 node build.mjs https://<配置先>     # src/ と assets/ → docs/、manifest.xml に配置先URLを入れる
-node test/parser.test.mjs            # 読み取りのテスト
+node test/run.mjs                    # 自動テスト（下の「自動テスト」）
 ```
 
 - ブラウザで `docs/taskpane.html` を直接開くと（Outlook の外）、件名と本文を貼り付けて試せる「試し画面」になる
 - プレビュー：`projects/.claude/launch.json` の `outlook-addin`（http://localhost:8812/taskpane.html）
 - アドイン ID：`8ba43ede-d65b-4c29-99b8-7ee60d015534`。直したら `build.mjs` の `VERSION` を上げる
+
+## 自動テスト
+
+```bash
+node test/run.mjs              # 単体テスト＋画面テスト（ヘッドレス Chrome）
+node test/run.mjs --manifest   # ＋ manifest 検証（Microsoft の検証サービスに送る）
+node test/run.mjs create-timed # シナリオを指定して一部だけ
+```
+
+- 単体テスト：`test/*.test.mjs`（node だけで動く）
+- 画面テスト：`test/harness/`。`src/taskpane.html` から本物の Office.js を外し、偽物（`office-mock.js`）を差し込んだページを `test/.out/` に作って、Chrome を画面なしで動かす。Outlook に渡した値（予定画面・送信内容）を記録して確かめる
+  - シナリオは `test/harness/scenarios.js`。1シナリオ＝1回のページ読み込みで、状態は毎回まっさら
+  - 表示されているかは hidden 属性ではなく CSS の結果で判定する（Outlook の中で試し入力欄が見えていた不具合を見逃さないため）
+- 実際の Outlook・Slack には何も送らない。Outlook 実機での見た目と、本物の Office.js との違いは確かめられない
+- 直したら、push する前に `node test/run.mjs --manifest` を通す（manifest のバージョンが 1.0 未満だとインストールで弾かれる）
 
 ## 導入
 

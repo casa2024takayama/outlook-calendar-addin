@@ -70,13 +70,17 @@
     };
     function parseAll(text) {
       const out = [];
-      const t = z(text);
+      // URL の中の「/2026/11/05/」は日付ではないので、同じ長さの空白に置き換えて位置をずらさない
+      const t = z(text).replace(/https?:\/\/\S+/g, (u) => ' '.repeat(u.length));
       RE.lastIndex = 0;
       let m;
       while ((m = RE.exec(t))) {
         const [, y1, mo1, d1, h1, mi1, ap1, y2, mo2, d2, dOnly, h2, mi2, ap2] = m;
         const M1 = +mo1, D1 = +d1;
         if (M1 < 1 || M1 > 12 || D1 < 1 || D1 > 31) continue;
+        // 「Ver 1/2」「参加率は 3/4」は分数。年・曜日・時刻・範囲のない「数/数」で、直前が版や割合の言葉なら日付にしない
+        const bare = !y1 && !h1 && !ap1 && !mo2 && !dOnly && /^\d{1,2}\s*\/\s*\d{1,2}$/.test(m[0].trim());
+        if (bare && /(?:\bver(?:sion)?\.?|\bv\.?|バージョン|版|率|割合|比率|スコア|点数|得点)\s*(?:は|が|:|：)?\s*$/i.test(t.slice(0, m.index))) continue;
         const Y1 = y1 ? +y1 : inferYear(M1, D1);
         const start = new Date(Y1, M1 - 1, D1);
         let end = start;

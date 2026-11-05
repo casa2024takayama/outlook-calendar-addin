@@ -7,7 +7,7 @@ if (!/^https:\/\//.test(base)) {
   console.error('配置先の https URL を指定してください。例: node build.mjs https://localhost:3000');
   process.exit(1);
 }
-const VERSION = '0.1.0.0';
+const VERSION = '1.0.0.0';
 
 rmSync('docs', { recursive: true, force: true });
 mkdirSync('docs/assets', { recursive: true });

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>メールから予定</title>
+  <script src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+  <link rel="stylesheet" href="taskpane.css">
+</head>
+<body>
+  <header class="hd">
+    <b>📅 メールから予定</b><small id="ver"></small>
+  </header>
+
+  <!-- ブラウザで直接開いたときだけ出る試し入力欄（Outlook の中では出ない） -->
+  <section id="demo" class="demo" hidden>
+    <p class="note">Outlook の外で開いています。メールの件名と本文を貼り付けて試せます。</p>
+    <input type="text" id="demoSubject" placeholder="件名">
+    <textarea id="demoBody" rows="8" placeholder="本文"></textarea>
+    <button class="b pri" id="demoRun">読み取る</button>
+  </section>
+
+  <section class="mail" id="mail"></section>
+  <section class="list" id="list"></section>
+
+  <footer class="ft">
+    <button class="b" id="add">＋ 手動で追加</button>
+    <label><input type="checkbox" id="pfx" checked>件名にメール件名を付ける</label>
+  </footer>
+  <p class="ft note">「予定を作成」は入力済みの予定画面を開くだけです。内容を確認して Outlook で「保存」してください。</p>
+  <div id="toast" class="toast" hidden></div>
+
+  <script src="parser.js"></script>
+  <script src="taskpane.js"></script>
+</body>
+</html>

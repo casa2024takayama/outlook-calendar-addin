@@ -42,3 +42,4 @@ button.b.pri:hover { background: var(--blue-mid); border-color: var(--blue-mid);
 .empty { padding: 16px 0; color: var(--muted); text-align: center; }
 .demo { padding: 8px 12px; display: grid; gap: 6px; border-bottom: 1px solid var(--blue-pale); }
 .toast { position: fixed; left: 12px; right: 12px; bottom: 12px; background: var(--text); color: #FFFFFF; padding: 8px 12px; border-radius: 6px; font-size: 12px; white-space: pre-wrap; }
+[hidden] { display: none !important; }
